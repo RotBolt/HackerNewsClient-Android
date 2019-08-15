@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvError"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:drawableTop="@drawable/ic_no_wifi"
+    android:drawablePadding="@dimen/pad_medium"
+    android:fontFamily="@font/comfortaa_bold"
+    android:gravity="center"
+    android:padding="@dimen/pad_large"
+    android:text="@string/no_internet"
+    android:textColor="@color/colorAccent"
+    android:textSize="21sp"
+    android:visibility="gone"
+    tools:visibility="visible"/>

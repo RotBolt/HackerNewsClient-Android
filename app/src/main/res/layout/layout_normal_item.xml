@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="2dp"
+    android:layout_marginTop="2dp"
+    android:layout_height="135dp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="@dimen/pad_normal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/ivLogoNews"
+            android:layout_width="70dp"
+            android:src="@drawable/hn"
+            android:layout_height="70dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:maxLines="3"
+                android:padding="@dimen/pad_normal"
+                tools:text="Silicon Valley witness tech hail"
+                android:gravity="start|center"
+                android:fontFamily="@font/comfortaa_bold"
+                android:ellipsize="end"
+                android:textSize="16sp"
+                android:id="@+id/tvTitleNormal"
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
+
+            <LinearLayout
+                android:padding="@dimen/pad_normal"
+                android:gravity="end"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvAuthorNormal"
+                    android:layout_width="0dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:fontFamily="@font/comfortaa"
+                    android:textSize="14sp"
+                    tools:text="by Author" />
+
+                <TextView
+                    android:drawableStart="@drawable/ic_comment"
+                    android:drawablePadding="@dimen/pad_normal"
+                    tools:text="21"
+                    android:id="@+id/tvCommentNormal"
+                    android:fontFamily="@font/comfortaa"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:drawableStart="@drawable/ic_thumb_up"
+                    android:drawablePadding="@dimen/pad_normal"
+                    tools:text="12"
+                    android:id="@+id/tvScoreNormal"
+                    android:fontFamily="@font/comfortaa"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

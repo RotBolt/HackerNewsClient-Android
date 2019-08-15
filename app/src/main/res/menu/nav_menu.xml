@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group_dash"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_dash"
+            android:icon="@drawable/ic_dashboard"
+            android:title="Dashboard" />
+    </group>
+    <group
+        android:id="@+id/group_category"
+        android:menuCategory="secondary"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_top"
+            android:icon="@drawable/ic_top"
+            android:title="Top" />
+
+        <item
+            android:id="@+id/action_new"
+            android:icon="@drawable/ic_new"
+            android:title="New" />
+
+        <item
+            android:id="@+id/action_job"
+            android:icon="@drawable/ic_job"
+            android:title="Job" />
+
+        <item
+            android:id="@+id/action_Show"
+            android:icon="@drawable/ic_show"
+            android:title="Show" />
+
+        <item
+            android:icon="@drawable/ic_ask"
+            android:id="@+id/action_ask"
+            android:title="Ask" />
+    </group>
+
+    <group
+        android:id="@+id/group_save"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_saved"
+            android:icon="@drawable/ic_bookmark"
+            android:title="Saved" />
+    </group>
+</menu>

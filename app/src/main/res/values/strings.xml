@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Hacker News</string>
+    <string name="open_drawer">Open</string>
+    <string name="close_drawer">Close</string>
+
+    <string name="no_internet">Seems like you are not connected</string>
+
+
+</resources>
