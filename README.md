@@ -1,6 +1,6 @@
 # HackerNewsClient-Android
 
-This is HackerNews Android Client following MVVM architecture using Coroutines, Room, okhttp3 ,Retrofit 2.6.0, Picasso, facebook-shimmer and circle-imageview
+This is HackerNews Android Client using [Hacker News Api](https://github.com/HackerNews/API), following MVVM architecture using Coroutines, Room, okhttp3 ,Retrofit 2.6.0, Picasso, facebook-shimmer and circle-imageview
 
 ## ScreenShots
 
@@ -27,3 +27,6 @@ This is HackerNews Android Client following MVVM architecture using Coroutines, 
 - [Picasso](https://square.github.io/picasso/)
 - [facebook-shimmer](https://facebook.github.io/shimmer-android/)
 - [CircleImageView](https://github.com/lopspower/CircularImageView)
+
+## API 
+- [Hacker News](https://github.com/HackerNews/API)
