@@ -12,4 +12,10 @@
         android:id="@+id/action_save"
         android:icon="@drawable/ic_bookmark_border" />
 
+    <item
+        android:title="Share"
+        app:showAsAction="always"
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share" />
+
 </menu>

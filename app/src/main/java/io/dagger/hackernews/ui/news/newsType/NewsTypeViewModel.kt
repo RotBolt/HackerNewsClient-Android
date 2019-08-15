@@ -4,12 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import io.dagger.hackernews.utils.Errors
-
 import io.dagger.hackernews.data.ItemsRepository
 import io.dagger.hackernews.data.database.ItemDatabase
 import io.dagger.hackernews.data.model.Item
 import io.dagger.hackernews.data.remote.HNApiClient
+import io.dagger.hackernews.utils.Errors
 import io.dagger.hackernews.utils.getSafeResponse
 import io.dagger.hackernews.utils.isConnected
 import kotlinx.coroutines.Deferred
@@ -22,7 +21,7 @@ class NewsTypeViewModel(application: Application) : AndroidViewModel(application
     private val client = HNApiClient(application).hnApiService
 
     private var typeStories = mutableListOf<Item?>()
-    private lateinit var itemIds: List<Long>
+    private var itemIds: List<Long> = emptyList()
     private val mutableListItems = mutableListOf<Item?>()
 
     val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
@@ -107,6 +106,10 @@ class NewsTypeViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun isNotFullLoaded(): Boolean = end < itemIds.size - 1
+    fun isNotFullLoaded(): Boolean =
+        if (itemIds.isNotEmpty())
+            end < itemIds.size - 1
+        else
+            false
 
 }

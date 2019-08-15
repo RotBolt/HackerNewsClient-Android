@@ -1,5 +1,6 @@
 package io.dagger.hackernews.ui.news.newsDetails
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,10 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
-import io.dagger.hackernews.utils.Errors
 import io.dagger.hackernews.R
 import io.dagger.hackernews.data.model.CommentItem
 import io.dagger.hackernews.data.model.Item
+import io.dagger.hackernews.utils.Errors
 import io.dagger.hackernews.utils.translate
 import kotlinx.android.synthetic.main.activity_news_details.*
 import kotlinx.android.synthetic.main.layout_comment.*
@@ -277,6 +278,8 @@ class NewsDetailsActivity : AppCompatActivity(), CoroutineScope {
                 val itemObj = getStoryItem()
                 itemObj.url?.let { openNewsArticle(it) }
             }
+
+            R.id.action_share -> shareUrl()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -318,6 +321,16 @@ class NewsDetailsActivity : AppCompatActivity(), CoroutineScope {
             setShowTitle(true)
         }.build()
         articleIntent.launchUrl(this, Uri.parse(url))
+    }
+
+    private fun shareUrl() {
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "Checkout the new HackerNews article ${getStoryItem().url}")
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(sendIntent, "Share News"))
+
     }
 
 }
