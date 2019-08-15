@@ -10,16 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
-import io.dagger.hackernews.utils.Errors
 import io.dagger.hackernews.R
 import io.dagger.hackernews.data.model.Item
-import io.dagger.hackernews.utils.isPortrait
-import io.dagger.hackernews.utils.setTopDrawable
-import io.dagger.hackernews.ui.news.ITEM_TYPE
-import io.dagger.hackernews.ui.news.NewsItemAdapter
 import io.dagger.hackernews.ui.home.banner.BannerAdapter
 import io.dagger.hackernews.ui.home.banner.ZoomOutPageTransformer
+import io.dagger.hackernews.ui.news.ITEM_TYPE
+import io.dagger.hackernews.ui.news.NewsItemAdapter
+import io.dagger.hackernews.utils.Errors
+import io.dagger.hackernews.utils.isPortrait
+import io.dagger.hackernews.utils.setTopDrawable
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.layout_error.*
 import kotlinx.coroutines.*
@@ -36,7 +37,9 @@ class HomeFragment : Fragment(), CoroutineScope {
 
     private lateinit var autoChangeJob: Job
 
-    private var retrySnack:Snackbar? = null
+    private var retrySnack: Snackbar? = null
+
+    private var bannerIdx = 0
 
     private val dashViewModel by lazy {
         ViewModelProviders.of(this).get(DashNewsViewModel::class.java)
@@ -155,11 +158,14 @@ class HomeFragment : Fragment(), CoroutineScope {
 
     override fun onResume() {
         super.onResume()
+        autoChangeJobStart()
+    }
+
+    private fun autoChangeJobStart() {
         autoChangeJob = launch {
-            var idx = 0
             while (true) {
                 delay(5000)
-                bannerPager.setCurrentItem((++idx) % 6, true)
+                bannerPager.setCurrentItem(++bannerIdx, true)
             }
         }
     }
@@ -244,6 +250,23 @@ class HomeFragment : Fragment(), CoroutineScope {
                 isVisible = true
                 adapter = BannerAdapter(requireFragmentManager(), topItems)
                 setPageTransformer(true, ZoomOutPageTransformer())
+                setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                    override fun onPageSelected(position: Int) {
+                        bannerIdx = position
+                    }
+
+                    override fun onPageScrollStateChanged(state: Int) {
+                        if (state == ViewPager.SCROLL_STATE_IDLE) {
+                            autoChangeJobStart()
+                        } else {
+                            autoChangeJob.cancel()
+                        }
+                    }
+
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+                    }
+                })
             }
         } catch (u: UnknownHostException) {
             showOfflineView()

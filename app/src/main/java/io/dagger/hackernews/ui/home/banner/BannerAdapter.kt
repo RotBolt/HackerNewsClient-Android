@@ -6,8 +6,12 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import io.dagger.hackernews.data.model.Item
 
 class BannerAdapter(fm: FragmentManager, private val items: List<Item>) : FragmentStatePagerAdapter(fm) {
-    override fun getItem(position: Int): Fragment {
-        return TopBannerFragment.newInstance(items[position])
+
+    private val bannerItems = Array(items.size){
+        TopBannerFragment.newInstance(items[it])
     }
-    override fun getCount() = items.size
+    override fun getItem(position: Int): Fragment {
+        return bannerItems[position % bannerItems.size]
+    }
+    override fun getCount() = Int.MAX_VALUE
 }
