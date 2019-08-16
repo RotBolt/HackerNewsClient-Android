@@ -3,7 +3,6 @@ package io.dagger.hackernews.ui.news.newsDetails
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -208,7 +207,6 @@ class NewsDetailsActivity : AppCompatActivity(), CoroutineScope {
       return  launch {
             try {
 
-                Log.i("PUI","depth child $depth")
                 val lf = LayoutInflater.from(this@NewsDetailsActivity)
                 loader.isVisible = true
 

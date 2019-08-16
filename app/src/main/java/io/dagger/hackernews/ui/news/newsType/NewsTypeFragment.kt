@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import io.dagger.hackernews.*
+import io.dagger.hackernews.R
 import io.dagger.hackernews.data.model.Item
 import io.dagger.hackernews.ui.news.ITEM_TYPE
 import io.dagger.hackernews.ui.news.NewsItemAdapter
@@ -83,8 +83,8 @@ class NewsTypeFragment : Fragment(), CoroutineScope {
             val newsType = arguments?.get(NEWSTYPE) as String
 
             if (newsType == "Saved") {
-
                 showSavedItems()
+                newsTypeContainer.isEnabled = false
             } else {
                 newsTypeViewModel.isLoading.observe(viewLifecycleOwner, Observer {
                     if (it) {
@@ -97,11 +97,10 @@ class NewsTypeFragment : Fragment(), CoroutineScope {
                     }
                 })
                 loadStories(newsType, false)
-            }
-
-            newsTypeContainer.apply {
-                setProgressViewOffset(true, 100, 250)
-                setOnRefreshListener { loadStories(newsType, true) }
+                newsTypeContainer.apply {
+                    setProgressViewOffset(true, 100, 250)
+                    setOnRefreshListener { loadStories(newsType, true) }
+                }
             }
         }
     }

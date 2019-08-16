@@ -2,7 +2,6 @@ package io.dagger.hackernews.ui.news.newsDetails
 
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +13,20 @@ import io.dagger.hackernews.utils.getDateTime
 import io.dagger.hackernews.utils.invert
 import kotlinx.android.synthetic.main.layout_comment.view.*
 import kotlinx.android.synthetic.main.layout_comment_load.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 class CommentsAdapter(
     private val comments: List<CommentItem?>,
     private val childCommentListener: ChildCommentListener,
     private val depth: Int = 0
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), CoroutineScope {
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main
 
     private val VIEW_LOAD = 0
     private val VIEW_COMMENT = 1
@@ -101,11 +108,12 @@ class CommentsAdapter(
 
                     subCommentContainer.setOnClickListener {
                         if (commentItem.isExpanded) {
+                            subCommentContainer.preventRapidBtnClick()
                             ivExpand.invert()
                             childCommentListener.onCollapse(rvChildren, commentLoader)
                         } else {
+                            subCommentContainer.preventRapidBtnClick()
                             ivExpand.invert()
-                            Log.i("PUI","onExpand ${depth+1}")
                             childCommentListener.onExpand(commentItem, rvChildren, commentLoader, depth + 1)
                         }
                         commentItem.isExpanded = !commentItem.isExpanded
@@ -117,5 +125,14 @@ class CommentsAdapter(
             }
         }
 
+        private fun View.preventRapidBtnClick() {
+            this.isClickable = false
+            launch {
+                delay(300)
+                this@preventRapidBtnClick.isClickable = true
+            }
+        }
     }
+
+
 }
