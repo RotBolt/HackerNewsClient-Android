@@ -2,6 +2,7 @@ package io.dagger.hackernews.ui.news.newsDetails
 
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -104,6 +105,7 @@ class CommentsAdapter(
                             childCommentListener.onCollapse(rvChildren, commentLoader)
                         } else {
                             ivExpand.invert()
+                            Log.i("PUI","onExpand ${depth+1}")
                             childCommentListener.onExpand(commentItem, rvChildren, commentLoader, depth + 1)
                         }
                         commentItem.isExpanded = !commentItem.isExpanded

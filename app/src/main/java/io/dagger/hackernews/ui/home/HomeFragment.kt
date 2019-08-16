@@ -164,7 +164,8 @@ class HomeFragment : Fragment(), CoroutineScope {
     private fun autoChangeJobStart() {
         autoChangeJob = launch {
             while (true) {
-                delay(5000)
+                delay(3000)
+
                 bannerPager.setCurrentItem(++bannerIdx, true)
             }
         }

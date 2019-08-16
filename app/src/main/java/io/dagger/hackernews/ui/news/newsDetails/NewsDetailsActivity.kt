@@ -3,6 +3,7 @@ package io.dagger.hackernews.ui.news.newsDetails
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -26,10 +27,7 @@ import io.dagger.hackernews.utils.translate
 import kotlinx.android.synthetic.main.activity_news_details.*
 import kotlinx.android.synthetic.main.layout_comment.*
 import kotlinx.android.synthetic.main.layout_comment_load.view.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -51,13 +49,18 @@ class NewsDetailsActivity : AppCompatActivity(), CoroutineScope {
 
     private val childCommentListener = object :
         CommentsAdapter.ChildCommentListener {
+
+        var childCommentJob:Job? = null
+
         override fun onExpand(commentItem: CommentItem, rv: RecyclerView, loader: View, depth: Int) {
-            loadChildComments(commentItem, rv, loader, depth)
+            childCommentJob = loadChildComments(commentItem, rv, loader, depth)
         }
 
         override fun onCollapse(rv: RecyclerView, loader: View) {
+            childCommentJob?.cancel()
             rv.translate(-rv.height * 1f, false)
             loader.isVisible = false
+            loader.divideContainerLoad.removeAllViews()
         }
 
     }
@@ -201,10 +204,11 @@ class NewsDetailsActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun loadChildComments(commentItem: CommentItem, rv: RecyclerView, loader: View, depth: Int) {
-        launch {
+    private fun loadChildComments(commentItem: CommentItem, rv: RecyclerView, loader: View, depth: Int):Job {
+      return  launch {
             try {
 
+                Log.i("PUI","depth child $depth")
                 val lf = LayoutInflater.from(this@NewsDetailsActivity)
                 loader.isVisible = true
 
@@ -215,6 +219,7 @@ class NewsDetailsActivity : AppCompatActivity(), CoroutineScope {
 
                 val childComments = newsDetailsViewModel.getChildCommentsAsync(commentItem).await()
                 loader.isVisible = false
+
                 val commentsAdapter =
                     CommentsAdapter(childComments, childCommentListener, depth)
                 rv.apply {
@@ -240,7 +245,6 @@ class NewsDetailsActivity : AppCompatActivity(), CoroutineScope {
                 }
             }
         }
-
     }
 
     private fun setCollapsingToolBarLayout() {
