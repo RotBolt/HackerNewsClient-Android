@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         val dialog = MaterialAlertDialogBuilder(this,R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
             .setTitle("Set Top Alerts Period")
-            .setSingleChoiceItems(arrayOf("2 Hours", "4 Hours", "8 Hours"), checkedItem) { dialog, which ->
+            .setSingleChoiceItems(arrayOf("2 Hours", "4 Hours", "8 Hours","Turn Off"), checkedItem) { dialog, which ->
 
                 when(which){
                     0-> {
@@ -191,6 +191,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                     2-> {
                         handOffTopAlertTask(8)
                         getSharedPrefs().edit().putInt("notif_period",2).apply()
+                    }
+                    3->{
+                        turnOffTopAlerts()
+                        getSharedPrefs().edit().putInt("notif_period",3).apply()
                     }
                 }
 
@@ -219,6 +223,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
 
         wm.enqueue(workRequest)
 
+    }
+
+    private fun turnOffTopAlerts(){
+        val wm = WorkManager.getInstance(applicationContext)
+        wm.cancelAllWorkByTag(topAlertWorkTag)
     }
 
     override fun onDestroy() {
