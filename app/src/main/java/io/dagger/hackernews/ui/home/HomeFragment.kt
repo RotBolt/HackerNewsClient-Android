@@ -122,6 +122,10 @@ class HomeFragment : Fragment(), CoroutineScope {
     private fun refresh() {
         launch {
 
+            autoChangeJob?.cancel()
+            isBannerLoaded = false
+            bannerIdx = 0
+
             showStoryContainer()
 
             shimmerTop.apply {
@@ -163,7 +167,7 @@ class HomeFragment : Fragment(), CoroutineScope {
 
     override fun onResume() {
         super.onResume()
-        if (isBannerLoaded){
+        if (isBannerLoaded) {
             autoChangeJobStart()
         }
     }
@@ -184,7 +188,8 @@ class HomeFragment : Fragment(), CoroutineScope {
         autoChangeJob?.cancel()
     }
 
-    private fun setRecyclerView(rv: RecyclerView, list: List<Item>?) {
+    private fun setRecyclerView(rv: RecyclerView, list: List<Item>?, isRefresh: Boolean) {
+
         rv.apply {
             isVisible = true
             isNestedScrollingEnabled = false
@@ -195,7 +200,9 @@ class HomeFragment : Fragment(), CoroutineScope {
                 requireActivity()
             )
             layoutManager = if (isPortrait(requireContext())) {
-                addItemDecoration(SpacesItemDecoration(40))
+                if (!isRefresh) {
+                    addItemDecoration(SpacesItemDecoration(40))
+                }
                 GridLayoutManager(requireContext(), 2)
             } else {
                 GridLayoutManager(requireContext(), 4)
@@ -212,24 +219,24 @@ class HomeFragment : Fragment(), CoroutineScope {
                     "New" -> {
                         shimmerNew.isVisible = false
                         shimmerNew.stopShimmer()
-                        setRecyclerView(rvNew, items)
+                        setRecyclerView(rvNew, items,isRefresh)
                     }
                     "Show" -> {
                         shimmerShow.isVisible = false
                         shimmerShow.stopShimmer()
-                        setRecyclerView(rvShow, items)
+                        setRecyclerView(rvShow, items,isRefresh)
 
                     }
                     "Job" -> {
                         shimmerJob.isVisible = false
                         shimmerJob.stopShimmer()
-                        setRecyclerView(rvJob, items)
+                        setRecyclerView(rvJob, items,isRefresh)
 
                     }
                     "Ask" -> {
                         shimmerAsk.isVisible = false
                         shimmerAsk.stopShimmer()
-                        setRecyclerView(rvAsk, items)
+                        setRecyclerView(rvAsk, items,isRefresh)
                     }
                 }
             }
@@ -271,7 +278,7 @@ class HomeFragment : Fragment(), CoroutineScope {
                         if (state == ViewPager.SCROLL_STATE_IDLE) {
                             autoChangeJobStart()
                         } else {
-                             autoChangeJob?.cancel()
+                            autoChangeJob?.cancel()
                         }
                     }
 
@@ -280,6 +287,7 @@ class HomeFragment : Fragment(), CoroutineScope {
                     }
                 })
             }
+            autoChangeJobStart()
         } catch (u: UnknownHostException) {
             showOfflineView()
         } catch (e: ConnectException) {
@@ -311,7 +319,7 @@ class HomeFragment : Fragment(), CoroutineScope {
             outRect.right = space
             outRect.bottom = space
 
-            if (parent.getChildLayoutPosition(view)%2 == 0) {
+            if (parent.getChildLayoutPosition(view) % 2 == 0) {
                 outRect.right = space
             } else {
                 outRect.left = space
