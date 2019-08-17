@@ -7,12 +7,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/hn_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/hn_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.newsDetails.NewsDetailWebActivity"></activity>
         <activity android:name=".ui.newsDetails.NewsDetailsActivity" />
         <activity android:name=".ui.MainActivity">
             <intent-filter>
