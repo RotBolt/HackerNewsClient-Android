@@ -1,4 +1,4 @@
-package io.dagger.hackernews.ui.news.newsType
+package io.dagger.hackernews.ui.newsType
 
 
 import android.graphics.Rect
@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import io.dagger.hackernews.R
 import io.dagger.hackernews.data.model.Item
-import io.dagger.hackernews.ui.news.ITEM_TYPE
-import io.dagger.hackernews.ui.news.NewsItemAdapter
+import io.dagger.hackernews.ui.ITEM_TYPE
+import io.dagger.hackernews.ui.NewsItemAdapter
 import io.dagger.hackernews.utils.Errors
 import io.dagger.hackernews.utils.isConnected
 import io.dagger.hackernews.utils.isPortrait

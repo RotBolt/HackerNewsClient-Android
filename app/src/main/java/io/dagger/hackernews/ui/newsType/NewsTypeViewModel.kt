@@ -1,4 +1,4 @@
-package io.dagger.hackernews.ui.news.newsType
+package io.dagger.hackernews.ui.newsType
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

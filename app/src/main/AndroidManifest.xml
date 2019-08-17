@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.newsDetails.NewsDetailWebActivity"></activity>
-        <activity android:name=".ui.news.newsDetails.NewsDetailsActivity" />
+        <activity android:name=".ui.newsDetails.NewsDetailsActivity" />
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

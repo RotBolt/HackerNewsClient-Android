@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import com.squareup.picasso.Picasso
 import io.dagger.hackernews.R
 import io.dagger.hackernews.data.model.Item
-import io.dagger.hackernews.ui.news.newsDetails.NewsDetailsActivity
+import io.dagger.hackernews.ui.newsDetails.NewsDetailsActivity
 import kotlinx.android.synthetic.main.layout_banner_item.*
 
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/newsTypeContainer"
-    tools:context=".ui.news.newsType.NewsTypeFragment">
+    tools:context=".ui.newsType.NewsTypeFragment">
 
     <FrameLayout
         android:layout_width="match_parent"

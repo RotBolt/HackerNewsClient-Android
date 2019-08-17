@@ -17,8 +17,8 @@ import io.dagger.hackernews.R
 import io.dagger.hackernews.data.model.Item
 import io.dagger.hackernews.ui.home.banner.BannerAdapter
 import io.dagger.hackernews.ui.home.banner.ZoomOutPageTransformer
-import io.dagger.hackernews.ui.news.ITEM_TYPE
-import io.dagger.hackernews.ui.news.NewsItemAdapter
+import io.dagger.hackernews.ui.ITEM_TYPE
+import io.dagger.hackernews.ui.NewsItemAdapter
 import io.dagger.hackernews.utils.Errors
 import io.dagger.hackernews.utils.isPortrait
 import io.dagger.hackernews.utils.setTopDrawable

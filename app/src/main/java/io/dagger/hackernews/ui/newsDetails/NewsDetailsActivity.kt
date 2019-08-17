@@ -1,4 +1,4 @@
-package io.dagger.hackernews.ui.news.newsDetails
+package io.dagger.hackernews.ui.newsDetails
 
 import android.content.Intent
 import android.net.Uri
@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
@@ -282,7 +283,11 @@ class NewsDetailsActivity : AppCompatActivity(), CoroutineScope {
             }
             R.id.action_web -> {
                 val itemObj = getStoryItem()
-                itemObj.url?.let { openNewsArticle(it) }
+                if(itemObj.url != null){
+                    openNewsArticle(itemObj.url)
+                }else{
+                    Toast.makeText(this,"No News article",Toast.LENGTH_LONG).show()
+                }
             }
 
             R.id.action_share -> shareUrl()

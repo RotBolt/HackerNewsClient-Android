@@ -12,7 +12,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.dagger.hackernews.R
 import io.dagger.hackernews.topNewsAlert.TopNewsFetchWorker
 import io.dagger.hackernews.ui.home.HomeFragment
-import io.dagger.hackernews.ui.news.newsType.NewsTypeFragment
+import io.dagger.hackernews.ui.newsType.NewsTypeFragment
 import io.dagger.hackernews.utils.getSharedPrefs
 import io.dagger.hackernews.utils.isFirstRun
 import kotlinx.android.synthetic.main.activity_main.*

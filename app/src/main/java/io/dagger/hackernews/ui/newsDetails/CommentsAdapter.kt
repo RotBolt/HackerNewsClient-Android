@@ -1,4 +1,4 @@
-package io.dagger.hackernews.ui.news.newsDetails
+package io.dagger.hackernews.ui.newsDetails
 
 import android.text.Html
 import android.text.method.LinkMovementMethod

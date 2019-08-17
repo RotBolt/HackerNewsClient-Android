@@ -16,7 +16,7 @@ import androidx.work.WorkerParameters
 import io.dagger.hackernews.R
 import io.dagger.hackernews.data.model.Item
 import io.dagger.hackernews.data.remote.HNApiClient
-import io.dagger.hackernews.ui.news.newsDetails.NewsDetailsActivity
+import io.dagger.hackernews.ui.newsDetails.NewsDetailsActivity
 import io.dagger.hackernews.utils.LOGO_URL
 import io.dagger.hackernews.utils.getSafeResponse
 import kotlinx.coroutines.CoroutineScope
