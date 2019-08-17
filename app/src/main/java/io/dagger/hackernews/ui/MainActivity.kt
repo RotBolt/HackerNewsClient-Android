@@ -7,10 +7,7 @@ import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.dagger.hackernews.R
 import io.dagger.hackernews.topNewsAlert.TopNewsFetchWorker
@@ -216,6 +213,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         val workRequest = PeriodicWorkRequestBuilder<TopNewsFetchWorker>(hour, TimeUnit.HOURS)
             .setConstraints(constraints)
             .addTag(topAlertWorkTag)
+            .setBackoffCriteria(BackoffPolicy.LINEAR,15,TimeUnit.MINUTES)
             .setInitialDelay(30,TimeUnit.MINUTES)
             .build()
 

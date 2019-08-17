@@ -22,6 +22,9 @@ import io.dagger.hackernews.utils.getSafeResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import kotlin.coroutines.CoroutineContext
 
 class TopNewsFetchWorker(appContext: Context,workerParameters: WorkerParameters )
@@ -38,18 +41,30 @@ class TopNewsFetchWorker(appContext: Context,workerParameters: WorkerParameters 
 
         Log.i("PUI","Work init")
         return runBlocking {
-            val itemIds = getSafeResponse(client.topStories())
+            try {
+                val itemIds = getSafeResponse(client.topStories())
 
-            val topItems = mutableListOf<Item>()
-            if (itemIds.isNotEmpty()){
-                for (i in 0 until 3){
-                    val item = client.getItem(itemIds[i]).body()
-                    item?.let {
-                        topItems.add(item)
+                val topItems = mutableListOf<Item>()
+                if (itemIds.isNotEmpty()){
+                    for (i in 0 until 3){
+                        val item = client.getItem(itemIds[i]).body()
+                        item?.let {
+                            topItems.add(item)
+                        }
                     }
                 }
+                generateTopAlerts(applicationContext,topItems)
+            }catch (e:Exception){
+                when(e){
+                    is UnknownHostException,
+                    is ConnectException,
+                    is SocketTimeoutException ->{
+                        return@runBlocking Result.retry()
+                    }
+                    else -> throw  e
+                }
             }
-            generateTopAlerts(applicationContext,topItems)
+
             Result.success()
         }
     }
