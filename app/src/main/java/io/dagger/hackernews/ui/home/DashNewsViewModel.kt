@@ -3,9 +3,9 @@ package io.dagger.hackernews.ui.home
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import io.dagger.hackernews.utils.Errors
 import io.dagger.hackernews.data.model.Item
 import io.dagger.hackernews.data.remote.HNApiClient
+import io.dagger.hackernews.utils.Errors
 import io.dagger.hackernews.utils.getSafeResponse
 import io.dagger.hackernews.utils.isConnected
 import kotlinx.coroutines.Deferred
@@ -21,6 +21,7 @@ class DashNewsViewModel(application: Application) : AndroidViewModel(application
     private val jobItems = mutableListOf<Item>()
     private val askItems = mutableListOf<Item>()
 
+    var bannerIdx=0
 
     fun geItemsAsync(type: String, isRefresh: Boolean): Deferred<List<Item>> {
         return viewModelScope.async(Dispatchers.IO) {

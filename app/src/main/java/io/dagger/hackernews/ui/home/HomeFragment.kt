@@ -1,6 +1,7 @@
 package io.dagger.hackernews.ui.home
 
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,11 +36,13 @@ class HomeFragment : Fragment(), CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + superVisor
 
-    private lateinit var autoChangeJob: Job
+    private var autoChangeJob: Job? = null
 
     private var retrySnack: Snackbar? = null
 
     private var bannerIdx = 0
+
+    private var isBannerLoaded = false
 
     private val dashViewModel by lazy {
         ViewModelProviders.of(this).get(DashNewsViewModel::class.java)
@@ -55,6 +58,8 @@ class HomeFragment : Fragment(), CoroutineScope {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        bannerIdx = dashViewModel.bannerIdx
 
         loadContent()
 
@@ -158,22 +163,25 @@ class HomeFragment : Fragment(), CoroutineScope {
 
     override fun onResume() {
         super.onResume()
-        autoChangeJobStart()
+        if (isBannerLoaded){
+            autoChangeJobStart()
+        }
     }
 
     private fun autoChangeJobStart() {
         autoChangeJob = launch {
             while (true) {
                 delay(3000)
-
-                bannerPager.setCurrentItem(++bannerIdx, true)
+                ++bannerIdx
+                dashViewModel.bannerIdx = bannerIdx
+                bannerPager.setCurrentItem(bannerIdx, true)
             }
         }
     }
 
     override fun onPause() {
         super.onPause()
-        autoChangeJob.cancel()
+        autoChangeJob?.cancel()
     }
 
     private fun setRecyclerView(rv: RecyclerView, list: List<Item>?) {
@@ -187,6 +195,7 @@ class HomeFragment : Fragment(), CoroutineScope {
                 requireActivity()
             )
             layoutManager = if (isPortrait(requireContext())) {
+                addItemDecoration(SpacesItemDecoration(40))
                 GridLayoutManager(requireContext(), 2)
             } else {
                 GridLayoutManager(requireContext(), 4)
@@ -247,6 +256,7 @@ class HomeFragment : Fragment(), CoroutineScope {
                 isVisible = false
             }
 
+            isBannerLoaded = true
             bannerPager.apply {
                 isVisible = true
                 adapter = BannerAdapter(requireFragmentManager(), topItems)
@@ -254,13 +264,14 @@ class HomeFragment : Fragment(), CoroutineScope {
                 setOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                     override fun onPageSelected(position: Int) {
                         bannerIdx = position
+                        dashViewModel.bannerIdx = bannerIdx
                     }
 
                     override fun onPageScrollStateChanged(state: Int) {
                         if (state == ViewPager.SCROLL_STATE_IDLE) {
                             autoChangeJobStart()
                         } else {
-                            autoChangeJob.cancel()
+                             autoChangeJob?.cancel()
                         }
                     }
 
@@ -287,5 +298,24 @@ class HomeFragment : Fragment(), CoroutineScope {
         coroutineContext.cancelChildren()
         retrySnack?.dismiss()
         super.onDetach()
+    }
+
+    inner class SpacesItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
+
+
+        override fun getItemOffsets(
+            outRect: Rect, view: View,
+            parent: RecyclerView, state: RecyclerView.State
+        ) {
+            outRect.left = space
+            outRect.right = space
+            outRect.bottom = space
+
+            if (parent.getChildLayoutPosition(view)%2 == 0) {
+                outRect.right = space
+            } else {
+                outRect.left = space
+            }
+        }
     }
 }

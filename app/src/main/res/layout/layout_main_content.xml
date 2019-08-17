@@ -16,16 +16,35 @@
             android:background="@color/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways">
 
-            <TextView
-                android:id="@+id/tvToolbarTitle"
-                android:text="Hacker News"
-                android:gravity="center"
-                android:textColor="@color/colorAccent"
-                android:textSize="18sp"
-                android:layout_marginEnd="?attr/actionBarSize"
-                android:fontFamily="@font/comfortaa_bold"
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvToolbarTitle"
+                    android:text="Hacker News"
+                    android:gravity="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    android:layout_marginEnd="@dimen/margin_normal"
+                    android:fontFamily="@font/comfortaa_bold"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:layout_marginEnd="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/pad_normal"
+                    android:id="@+id/ivNotif"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_notifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

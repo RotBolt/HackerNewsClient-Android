@@ -3,18 +3,25 @@ package io.dagger.hackernews.ui
 import android.os.Bundle
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.dagger.hackernews.R
+import io.dagger.hackernews.topNewsAlert.TopNewsFetchWorker
 import io.dagger.hackernews.ui.home.HomeFragment
 import io.dagger.hackernews.ui.news.newsType.NewsTypeFragment
+import io.dagger.hackernews.utils.getSharedPrefs
+import io.dagger.hackernews.utils.isFirstRun
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_main_content.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.*
+import java.util.concurrent.TimeUnit
 import kotlin.coroutines.CoroutineContext
 
 
@@ -27,11 +34,20 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private var fragTag = "Home"
     private var toolbarTitle = "Hacker News"
 
+    private val topAlertWorkTag = "top alerts"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setNavDrawer()
         setFragment(savedInstanceState)
+
+        if (isFirstRun()){
+            handOffTopAlertTask(4)
+            getSharedPrefs().edit().putBoolean("First",false).apply()
+        }
+
+        ivNotif.setOnClickListener { showNotifPeriodDialog() }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -128,26 +144,90 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private fun setToolBar(type: String) {
         tvToolbarTitle.text = type
         when (type) {
-            "Hacker News" ->
+            "Hacker News" -> {
                 tvToolbarTitle.setTextColor(resources.getColor(R.color.colorAccent))
-            "Ask" ->
+                ivNotif.visibility = View.VISIBLE
+            }
+            "Ask" -> {
                 tvToolbarTitle.setTextColor(resources.getColor(R.color.colorJamun))
-            "Show" ->
+                ivNotif.visibility = View.INVISIBLE
+            }
+            "Show" -> {
                 tvToolbarTitle.setTextColor(resources.getColor(R.color.colorRed))
-            "Job" ->
+                ivNotif.visibility = View.INVISIBLE
+            }
+            "Job" -> {
+                ivNotif.visibility = View.INVISIBLE
                 tvToolbarTitle.setTextColor(resources.getColor(R.color.colorGreen))
-            "New" ->
+            }
+            "New" -> {
+                ivNotif.visibility = View.INVISIBLE
                 tvToolbarTitle.setTextColor(resources.getColor(R.color.colorAccent))
-            "Top" ->
+            }
+            "Top" -> {
                 tvToolbarTitle.setTextColor(resources.getColor(R.color.colorOrange))
-            "Saved" ->
+                ivNotif.visibility = View.INVISIBLE
+            }
+            "Saved" -> {
                 tvToolbarTitle.setTextColor(resources.getColor(R.color.colorJamun))
+                ivNotif.visibility = View.INVISIBLE
+            }
         }
+    }
+
+    private fun showNotifPeriodDialog() {
+        val checkedItem = getSharedPrefs().getInt("notif_period",1)
+
+        val dialog = MaterialAlertDialogBuilder(this,R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
+            .setTitle("Set Top Alerts Period")
+            .setSingleChoiceItems(arrayOf("2 Hours", "4 Hours", "8 Hours"), checkedItem) { dialog, which ->
+
+                when(which){
+                    0-> {
+                        handOffTopAlertTask(2)
+                        getSharedPrefs().edit().putInt("notif_period",0).apply()
+                    }
+                    1-> {
+                        handOffTopAlertTask(4)
+                        getSharedPrefs().edit().putInt("notif_period",1).apply()
+                    }
+                    2-> {
+                        handOffTopAlertTask(8)
+                        getSharedPrefs().edit().putInt("notif_period",2).apply()
+                    }
+                }
+
+                launch {
+                    delay(750)
+                    dialog.dismiss()
+                }
+            }.create()
+        dialog.show()
+    }
+
+    private fun handOffTopAlertTask(hour: Long) {
+
+        val wm = WorkManager.getInstance(applicationContext)
+        wm.cancelAllWorkByTag(topAlertWorkTag)
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        val workRequest = PeriodicWorkRequestBuilder<TopNewsFetchWorker>(hour, TimeUnit.HOURS)
+            .setConstraints(constraints)
+            .addTag(topAlertWorkTag)
+            .setInitialDelay(30,TimeUnit.MINUTES)
+            .build()
+
+        wm.enqueue(workRequest)
+
     }
 
     override fun onDestroy() {
         coroutineContext.cancelChildren()
         super.onDestroy()
     }
+
+
 
 }

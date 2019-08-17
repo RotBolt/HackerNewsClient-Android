@@ -2,6 +2,7 @@ package io.dagger.hackernews.utils
 
 import android.animation.Animator
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -10,6 +11,8 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import retrofit2.Response
 import java.util.*
+
+val LOGO_URL = "https://logo.clearbit.com/"
 
 fun getDateTime(timeInMilli: Long): String {
 
@@ -87,4 +90,13 @@ fun <T> getSafeResponse(response: Response<List<T>>): List<T> {
 
 fun TextView.setTopDrawable(drawable: Drawable) {
     setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null)
+}
+
+fun Context.isFirstRun():Boolean{
+   val sharedPrefs = getSharedPrefs()
+    return sharedPrefs.getBoolean("First",true)
+}
+
+fun Context.getSharedPrefs():SharedPreferences{
+    return getSharedPreferences("hackerNews",Context.MODE_PRIVATE)
 }

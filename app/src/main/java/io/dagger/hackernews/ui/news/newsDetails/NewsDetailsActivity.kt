@@ -49,7 +49,7 @@ class NewsDetailsActivity : AppCompatActivity(), CoroutineScope {
     private val childCommentListener = object :
         CommentsAdapter.ChildCommentListener {
 
-        var childCommentJob:Job? = null
+        var childCommentJob: Job? = null
 
         override fun onExpand(commentItem: CommentItem, rv: RecyclerView, loader: View, depth: Int) {
             childCommentJob = loadChildComments(commentItem, rv, loader, depth)
@@ -203,8 +203,8 @@ class NewsDetailsActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun loadChildComments(commentItem: CommentItem, rv: RecyclerView, loader: View, depth: Int):Job {
-      return  launch {
+    private fun loadChildComments(commentItem: CommentItem, rv: RecyclerView, loader: View, depth: Int): Job {
+        return launch {
             try {
 
                 val lf = LayoutInflater.from(this@NewsDetailsActivity)
@@ -251,7 +251,11 @@ class NewsDetailsActivity : AppCompatActivity(), CoroutineScope {
         val item = getStoryItem()
         Picasso.get().load(logoUrl).placeholder(R.drawable.hn).into(ivLogoDetails)
 
-        collapsingToolbar.title = item.domain.removeSuffix("/")
+        collapsingToolbar.title = if (item.domain != "nill") {
+            item.domain.removeSuffix("/")
+        } else {
+            ""
+        }
 
         tvAuthor.text = item.by
         tvScore.text = item.score.toString()

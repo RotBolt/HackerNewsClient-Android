@@ -6,51 +6,40 @@
     android:layout_gravity="center_horizontal"
     android:layout_height="wrap_content"
     android:padding="8dp"
+    android:gravity="center"
     android:orientation="vertical"
     android:layout_margin="@dimen/margin_normal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/logoHolder"
+        android:transitionName="logoTransition"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_gravity="center"
+            android:id="@+id/ivLogo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="@dimen/margin_medium"
+            tools:src="@drawable/techcrunchcom" />
+    </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/logoHolder"
-            android:transitionName="logoTransition"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivLogo"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_margin="8dp"
-                android:src="@drawable/techcrunchcom" />
-        </androidx.cardview.widget.CardView>
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvTitle"
-            android:fontFamily="@font/comfortaa_bold"
-            android:textColor="@android:color/black"
-            android:theme="@style/Theme.MaterialComponents"
-            android:text="Silicon Valley witness major tech haul"
-            android:textSize="18sp"
-            android:maxLines="3"
-            android:ellipsize="end"
-            android:padding="@dimen/pad_normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/logoHolder"
-            app:layout_constraintStart_toStartOf="@+id/logoHolder"
-            app:layout_constraintTop_toBottomOf="@+id/logoHolder" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTitle"
+        android:fontFamily="@font/comfortaa_bold"
+        android:textColor="@android:color/black"
+        android:theme="@style/Theme.MaterialComponents"
+        tools:text="Silicon Valley witness major tech haul"
+        android:textSize="18sp"
+        android:maxLines="3"
+        android:ellipsize="end"
+        android:padding="@dimen/pad_normal" />
 
 
 </LinearLayout>

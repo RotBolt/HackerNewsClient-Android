@@ -11,6 +11,7 @@ import com.squareup.picasso.Picasso
 import io.dagger.hackernews.R
 import io.dagger.hackernews.data.model.Item
 import io.dagger.hackernews.ui.news.newsDetails.NewsDetailsActivity
+import io.dagger.hackernews.utils.LOGO_URL
 import kotlinx.android.synthetic.main.layout_normal_item.view.*
 import kotlinx.android.synthetic.main.layout_small_item.view.*
 
@@ -28,8 +29,6 @@ class NewsItemAdapter(
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val picasso = Picasso.get()
-
-    private val LOGO_URL = "https://logo.clearbit.com/"
 
     private val VIEW_STORY = 0
     private val VIEW_LOAD = 1
@@ -95,7 +94,11 @@ class NewsItemAdapter(
                 when (itemType) {
                     ITEM_TYPE.SMALL -> {
                         tvTitle.text = item.title
-                        picasso.load("$LOGO_URL${item.domain}").placeholder(R.drawable.hn).into(ivLogo)
+                        picasso.load("$LOGO_URL${item.domain}")
+                            .placeholder(R.drawable.hn)
+                            .fit()
+                            .centerInside()
+                            .into(ivLogo)
                     }
                     ITEM_TYPE.NORMAL -> {
                         tvTitleNormal.text = item.title

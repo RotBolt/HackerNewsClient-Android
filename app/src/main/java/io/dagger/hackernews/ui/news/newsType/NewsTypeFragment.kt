@@ -174,7 +174,7 @@ class NewsTypeFragment : Fragment(), CoroutineScope {
                     is Errors.FetchException -> showErrorView()
                 }
             } finally {
-                shimmerNewsType.apply {
+                shimmerNewsType?.apply {
                     stopShimmer()
                     isVisible = false
                 }
