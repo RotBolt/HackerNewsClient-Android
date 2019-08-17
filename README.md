@@ -1,4 +1,8 @@
-# HackerNewsClient-Android
+# HackerNewsClient-Android 
+
+<p align="center">
+<img src="https://user-images.githubusercontent.com/24780524/63209549-00420c00-c100-11e9-837d-9d757c4da497.png"> 
+</p>
 
 This is HackerNews Android Client using [Hacker News Api](https://github.com/HackerNews/API), following MVVM architecture using Coroutines, Room, WorkManager, okhttp3 ,Retrofit, Picasso, facebook-shimmer and circle-imageview
 
