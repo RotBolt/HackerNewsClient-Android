@@ -15,10 +15,10 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.snackbar.Snackbar
 import io.dagger.hackernews.R
 import io.dagger.hackernews.data.model.Item
-import io.dagger.hackernews.ui.home.banner.BannerAdapter
-import io.dagger.hackernews.ui.home.banner.ZoomOutPageTransformer
 import io.dagger.hackernews.ui.ITEM_TYPE
 import io.dagger.hackernews.ui.NewsItemAdapter
+import io.dagger.hackernews.ui.home.banner.BannerAdapter
+import io.dagger.hackernews.ui.home.banner.ZoomOutPageTransformer
 import io.dagger.hackernews.utils.Errors
 import io.dagger.hackernews.utils.isPortrait
 import io.dagger.hackernews.utils.setTopDrawable
@@ -43,6 +43,7 @@ class HomeFragment : Fragment(), CoroutineScope {
     private var bannerIdx = 0
 
     private var isBannerLoaded = false
+    private var isAutoChangeJobStarted = false
 
     private val dashViewModel by lazy {
         ViewModelProviders.of(this).get(DashNewsViewModel::class.java)
@@ -122,6 +123,7 @@ class HomeFragment : Fragment(), CoroutineScope {
     private fun refresh() {
         launch {
 
+            isAutoChangeJobStarted = false
             autoChangeJob?.cancel()
             isBannerLoaded = false
             bannerIdx = 0
@@ -173,6 +175,7 @@ class HomeFragment : Fragment(), CoroutineScope {
     }
 
     private fun autoChangeJobStart() {
+        isAutoChangeJobStarted = true
         autoChangeJob = launch {
             while (true) {
                 delay(3000)
@@ -185,6 +188,7 @@ class HomeFragment : Fragment(), CoroutineScope {
 
     override fun onPause() {
         super.onPause()
+        isAutoChangeJobStarted = false
         autoChangeJob?.cancel()
     }
 
@@ -219,24 +223,24 @@ class HomeFragment : Fragment(), CoroutineScope {
                     "New" -> {
                         shimmerNew.isVisible = false
                         shimmerNew.stopShimmer()
-                        setRecyclerView(rvNew, items,isRefresh)
+                        setRecyclerView(rvNew, items, isRefresh)
                     }
                     "Show" -> {
                         shimmerShow.isVisible = false
                         shimmerShow.stopShimmer()
-                        setRecyclerView(rvShow, items,isRefresh)
+                        setRecyclerView(rvShow, items, isRefresh)
 
                     }
                     "Job" -> {
                         shimmerJob.isVisible = false
                         shimmerJob.stopShimmer()
-                        setRecyclerView(rvJob, items,isRefresh)
+                        setRecyclerView(rvJob, items, isRefresh)
 
                     }
                     "Ask" -> {
                         shimmerAsk.isVisible = false
                         shimmerAsk.stopShimmer()
-                        setRecyclerView(rvAsk, items,isRefresh)
+                        setRecyclerView(rvAsk, items, isRefresh)
                     }
                 }
             }
@@ -276,8 +280,11 @@ class HomeFragment : Fragment(), CoroutineScope {
 
                     override fun onPageScrollStateChanged(state: Int) {
                         if (state == ViewPager.SCROLL_STATE_IDLE) {
-                            autoChangeJobStart()
+                            if (!isAutoChangeJobStarted) {
+                                autoChangeJobStart()
+                            }
                         } else {
+                            isAutoChangeJobStarted = false
                             autoChangeJob?.cancel()
                         }
                     }

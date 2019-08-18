@@ -98,6 +98,17 @@ class TopNewsFetchWorker(appContext: Context, workerParameters: WorkerParameters
                         "Hacker News"
                     }
                 )
+                setStyle(
+                    NotificationCompat.BigTextStyle()
+                        .setBigContentTitle(
+                            if (item.domain != "nill") {
+                                item.domain.removeSuffix("/")
+                            } else {
+                                "Hacker News"
+                            }
+                        )
+                        .bigText(item.title)
+                )
                 setAutoCancel(true)
                 setContentText(item.title)
                 setContentIntent(pi)
